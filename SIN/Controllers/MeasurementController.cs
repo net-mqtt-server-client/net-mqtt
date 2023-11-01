@@ -8,7 +8,7 @@ namespace SIN.Controllers
     /// Controller for requests connected with <see cref="Measurement"/>.
     /// </summary>
     [ApiController]
-    [Route("measurements")]
+    [Route("api/measurements")]
     public class MeasurementController : ControllerBase
     {
         private readonly IMeasurementService service;

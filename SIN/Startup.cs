@@ -1,12 +1,12 @@
 ﻿using SIN.Domain.Repositories.Interfaces;
+using SIN.Hubs;
 using SIN.Infrastructure.Context;
 using SIN.Infrastructure.Context.Interfaces;
 using SIN.Infrastructure.Repositories;
 using SIN.Services.Converters;
-using SIN.Services.Hubs;
 using SIN.Services.Services;
 using SIN.Services.Services.Interfaces;
-using SIN.Services.Subscribers;
+using SIN.Subscribers;
 
 namespace SIN
 {
@@ -40,7 +40,7 @@ namespace SIN
             services.AddScoped<IMeasurementService, MeasurementService>();
             services.AddScoped<IJsonConverter, JsonConverter>();
             services.AddScoped<ICsvConverter, CsvConverter>();
-            services.AddHostedService<MqttSubscriberService>();
+            services.AddHostedService<MqttSubscriber>();
             services.AddControllers();
             services.AddCors();
             services.AddLogging();

@@ -1,22 +1,18 @@
 ﻿using System.Globalization;
 using System.Text;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using MQTTnet;
 using MQTTnet.Client;
 using SIN.Domain.Entities;
 using SIN.Domain.Repositories.Interfaces;
 using SIN.Services.Hubs;
 
-namespace SIN.Services.Subscribers
+namespace SIN.Subscribers
 {
     /// <summary>
     /// Service for handling MQTT messages.
     /// </summary>
-    public class MqttSubscriberService : IDisposable, IHostedService
+    public class MqttSubscriber : IDisposable, IHostedService
     {
         private readonly IMqttClient client;
 
@@ -33,15 +29,15 @@ namespace SIN.Services.Subscribers
         private readonly IHubContext<HubClient> hubClient;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MqttSubscriberService"/> class.
+        /// Initializes a new instance of the <see cref="MqttSubscriber"/> class.
         /// </summary>
         /// <param name="serviceProvider">Service provider to inject <see cref="IMeasurementRepository"/>.</param>
         /// <param name="configuration">Configuration object.</param>
         /// <param name="logger">Logger.</param>
         /// <param name="hubClient">SignalR hub.</param>
-        public MqttSubscriberService(
+        public MqttSubscriber(
             IConfiguration configuration,
-            ILogger<MqttSubscriberService> logger,
+            ILogger<MqttSubscriber> logger,
             IServiceProvider serviceProvider,
             IHubContext<HubClient> hubClient)
         {

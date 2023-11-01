@@ -1,6 +1,6 @@
 ﻿using SIN.Domain.Entities;
 
-namespace SIN.Domain.Repositories.Interfaces
+namespace SIN.Infrastructure.Repositories.Interfaces
 {
     /// <summary>
     /// Interface for <see cref="Measurement"/> repo.
