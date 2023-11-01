@@ -1,14 +1,12 @@
-﻿using Microsoft.AspNetCore.HttpLogging;
-using Microsoft.Extensions.Logging.Console;
-using Microsoft.Extensions.Logging.Debug;
-using Microsoft.Extensions.Logging.EventSource;
-using Microsoft.Extensions.Logging.TraceSource;
-using SIN.Domain.Repositories.Interfaces;
+﻿using SIN.Domain.Repositories.Interfaces;
 using SIN.Infrastructure.Context;
 using SIN.Infrastructure.Context.Interfaces;
 using SIN.Infrastructure.Repositories;
+using SIN.Services.Converters;
+using SIN.Services.Hubs;
 using SIN.Services.Services;
 using SIN.Services.Services.Interfaces;
+using SIN.Services.Subscribers;
 
 namespace SIN
 {
@@ -40,21 +38,13 @@ namespace SIN
             services.AddSingleton<IApplicationContext, ApplicationContext>();
             services.AddScoped<IMeasurementRepository, MeasurementRepository>();
             services.AddScoped<IMeasurementService, MeasurementService>();
-            services.AddScoped<IJsonConverterService, JsonConverterService>();
-            services.AddScoped<ICsvConverterService, CsvConverterService>();
+            services.AddScoped<IJsonConverter, JsonConverter>();
+            services.AddScoped<ICsvConverter, CsvConverter>();
             services.AddHostedService<MqttSubscriberService>();
             services.AddControllers();
             services.AddCors();
             services.AddLogging();
-            services.AddHttpLogging((logging) =>
-            {
-                logging.LoggingFields = HttpLoggingFields.All;
-                logging.RequestHeaders.Add("sec-ch-ua");
-                logging.ResponseHeaders.Add("MyResponseHeader");
-                logging.MediaTypeOptions.AddText("application/javascript");
-                logging.RequestBodyLogLimit = 4096;
-                logging.ResponseBodyLogLimit = 4096;
-            });
+            services.AddSignalR();
         }
 
         /// <summary>
@@ -65,14 +55,13 @@ namespace SIN
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseHttpsRedirection();
-            app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins(this.Configuration.GetSection("Frontend").Value!));
+            app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins(this.Configuration.GetSection("CORS").Get<string>() ?? throw new InvalidDataException("frontend link not found")));
 
-            app.UseAuthentication();
             app.UseRouting();
-            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHub<HubClient>(this.Configuration.GetSection("Hub:Endpoint").Get<string>());
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");

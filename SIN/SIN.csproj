@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>e82d18b8-8222-4f10-b7df-a82344cd1b8d</UserSecretsId>
     <StartupObject>SIN.Program</StartupObject>

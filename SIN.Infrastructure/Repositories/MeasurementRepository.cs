@@ -1,7 +1,9 @@
-﻿using MongoDB.Driver;
-using SIN.Infrastructure.Context.Interfaces;
+﻿using Amazon.Runtime.Internal;
+using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 using SIN.Domain.Entities;
 using SIN.Domain.Repositories.Interfaces;
+using SIN.Infrastructure.Context.Interfaces;
 
 namespace SIN.Infrastructure.Repositories
 {
@@ -22,9 +24,60 @@ namespace SIN.Infrastructure.Repositories
         }
 
         /// <inheritdoc/>
-        public async Task<IEnumerable<Measurement>> GetAllAsync()
+        public async Task<IEnumerable<Measurement>> GetByFiltersAsync(string location, string sensor, string orderBy, string order, string number)
         {
-            return await this.context.Measurements.Find(_ => true).ToListAsync();
+            var measurements = this.context.Measurements.AsQueryable();
+            if (!string.IsNullOrEmpty(location))
+            {
+                measurements = measurements.Where(m => m.Location == location);
+            }
+
+            if (!string.IsNullOrEmpty(sensor))
+            {
+                measurements = measurements.Where(m => m.Sensor == sensor);
+            }
+
+            if (!string.IsNullOrEmpty(orderBy))
+            {
+                if (string.IsNullOrEmpty(order) || order == "asc")
+                {
+                    if (orderBy == "location")
+                    {
+                        measurements = measurements.OrderBy(m => m.Location);
+                    }
+                    else if (orderBy == "sensor")
+                    {
+                        measurements = measurements.OrderBy(m => m.Sensor);
+                    }
+                    else if (orderBy == "value")
+                    {
+                        measurements = measurements.OrderBy(m => m.Value);
+                    }
+                }
+                else if (order == "desc")
+                {
+                    if (orderBy == "location")
+                    {
+                        measurements = measurements.OrderByDescending(m => m.Location);
+                    }
+                    else if (orderBy == "sensor")
+                    {
+                        measurements = measurements.OrderByDescending(m => m.Sensor);
+                    }
+                    else if (orderBy == "value")
+                    {
+                        measurements = measurements.OrderByDescending(m => m.Value);
+                    }
+                }
+            }
+
+            if (!string.IsNullOrEmpty(number))
+            {
+                int.TryParse(number, out int num);
+                measurements = measurements.Take(num);
+            }
+
+            return await measurements.ToListAsync();
         }
 
         /// <inheritdoc/>

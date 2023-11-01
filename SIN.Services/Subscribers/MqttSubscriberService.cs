@@ -1,15 +1,17 @@
-﻿using System.Text;
+﻿using System.Globalization;
+using System.Text;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using MQTTnet;
 using MQTTnet.Client;
 using SIN.Domain.Entities;
 using SIN.Domain.Repositories.Interfaces;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using System.Globalization;
+using SIN.Services.Hubs;
 
-namespace SIN.Services.Services
+namespace SIN.Services.Subscribers
 {
     /// <summary>
     /// Service for handling MQTT messages.
@@ -17,11 +19,18 @@ namespace SIN.Services.Services
     public class MqttSubscriberService : IDisposable, IHostedService
     {
         private readonly IMqttClient client;
+
         private readonly MqttClientOptions options;
+
         private readonly string[] topics;
+
         private readonly IMeasurementRepository measurementRepository;
+
         private readonly IConfiguration configuration;
+
         private readonly ILogger logger;
+
+        private readonly IHubContext<HubClient> hubClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MqttSubscriberService"/> class.
@@ -29,22 +38,30 @@ namespace SIN.Services.Services
         /// <param name="serviceProvider">Service provider to inject <see cref="IMeasurementRepository"/>.</param>
         /// <param name="configuration">Configuration object.</param>
         /// <param name="logger">Logger.</param>
-        public MqttSubscriberService(IConfiguration configuration,
-                                     ILogger<MqttSubscriberService> logger,
-                                     IServiceProvider serviceProvider)
+        /// <param name="hubClient">SignalR hub.</param>
+        public MqttSubscriberService(
+            IConfiguration configuration,
+            ILogger<MqttSubscriberService> logger,
+            IServiceProvider serviceProvider,
+            IHubContext<HubClient> hubClient)
         {
+            this.configuration = configuration;
             this.client = new MqttFactory().CreateMqttClient();
-            this.client.ConnectedAsync += this.ConnectionHandler;
-            this.client.DisconnectedAsync += this.DisconnectionHandler;
-            this.client.ApplicationMessageReceivedAsync += this.MessageReceivedHandler;
-            this.options = new MqttClientOptionsBuilder().WithTcpServer("localhost", 1883).WithClientId("client1").Build();
+            this.options = new MqttClientOptionsBuilder()
+                .WithTcpServer(
+                    this.configuration.GetSection("MQTT:Host").Get<string>(),
+                    this.configuration.GetSection("MQTT:Port").Get<int>())
+                .WithClientId(
+                    this.configuration.GetSection("MQTT:ClientId").Get<string>())
+                .Build();
             using (var scope = serviceProvider.CreateScope())
             {
-                this.measurementRepository = scope.ServiceProvider.GetService<IMeasurementRepository>()!;
+                this.measurementRepository = scope.ServiceProvider.GetService<IMeasurementRepository>() !;
             }
-            this.configuration = configuration;
-            this.topics = this.configuration.GetSection("topics").Get<string[]>() ?? throw new InvalidDataException("There are no topics in the configuration");
+
+            this.topics = this.configuration.GetSection("MQTT:Topics").Get<string[]>() ?? throw new InvalidDataException("There are no topics in the configuration");
             this.logger = logger;
+            this.hubClient = hubClient;
         }
 
         /// <inheritdoc/>
@@ -58,11 +75,14 @@ namespace SIN.Services.Services
         {
             try
             {
+                this.client.ConnectedAsync += this.ConnectionHandler;
+                this.client.DisconnectedAsync += this.DisconnectionHandler;
+                this.client.ApplicationMessageReceivedAsync += this.MessageReceivedHandler;
                 await this.client.ConnectAsync(this.options, cancellationToken);
             }
             catch
             {
-               this.logger.LogInformation($"Connecting to MQTT broker failed.");
+                this.logger.LogInformation($"Connecting to MQTT broker failed.");
             }
         }
 
@@ -124,7 +144,9 @@ namespace SIN.Services.Services
             var location = args.ApplicationMessage.Topic.Split('_')[1].Split('/')[0];
             var sensor = args.ApplicationMessage.Topic.Split('_')[1].Split('/')[1];
 
-            await this.measurementRepository.SaveMeasurementAsync(new Measurement { Id = Guid.NewGuid(), Location = location, Sensor = sensor, Value = value });
+            var measurement = new Measurement { Id = Guid.NewGuid(), Location = location, Sensor = sensor, Value = value };
+            await this.measurementRepository.SaveMeasurementAsync(measurement);
+            await this.hubClient.Clients.All.SendAsync("RecieveMessage", measurement);
             this.logger.LogInformation($"Received message on topic '{args.ApplicationMessage.Topic}': {Encoding.UTF8.GetString(args.ApplicationMessage.PayloadSegment)}");
         }
     }

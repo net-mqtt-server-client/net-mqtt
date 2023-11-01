@@ -1,7 +1,7 @@
 ﻿namespace SIN.Domain.Entities
 {
     /// <summary>
-    /// Entities representing sensor measurement in specified location.
+    /// Entity representing sensor measurement in specified location.
     /// </summary>
     public class Measurement
     {

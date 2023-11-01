@@ -1,7 +1,7 @@
-﻿using MongoDB.Driver;
-using SIN.Infrastructure.Context.Interfaces;
+﻿using Microsoft.Extensions.Configuration;
+using MongoDB.Driver;
 using SIN.Domain.Entities;
-using Microsoft.Extensions.Configuration;
+using SIN.Infrastructure.Context.Interfaces;
 
 namespace SIN.Infrastructure.Context
 {
@@ -10,14 +10,8 @@ namespace SIN.Infrastructure.Context
     /// </summary>
     public class ApplicationContext : IApplicationContext
     {
-        /// <summary>
-        /// Database.
-        /// </summary>
         private readonly IMongoDatabase db;
 
-        /// <summary>
-        /// Configuration.
-        /// </summary>
         private readonly IConfiguration configuration;
 
         /// <summary>
@@ -28,7 +22,7 @@ namespace SIN.Infrastructure.Context
         {
             this.configuration = config;
             var connectionString = this.configuration.GetConnectionString("MongoDB");
-            var dbName = this.configuration.GetSection("MongoDB:Database").Value;
+            var dbName = this.configuration.GetSection("MongoDB:Database").Get<string>();
             this.db = new MongoClient(connectionString).GetDatabase(dbName);
             this.Measurements = this.db.GetCollection<Measurement>("Measurements");
         }
