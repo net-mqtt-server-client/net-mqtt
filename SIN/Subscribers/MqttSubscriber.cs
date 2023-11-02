@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.SignalR;
 using MQTTnet;
 using MQTTnet.Client;
 using SIN.Domain.Entities;
-using SIN.Domain.Repositories.Interfaces;
-using SIN.Services.Hubs;
+using SIN.Hubs;
+using SIN.Infrastructure.Repositories.Interfaces;
 
 namespace SIN.Subscribers
 {

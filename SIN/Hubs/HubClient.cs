@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using Microsoft.Extensions.Logging;
 
-namespace SIN.Services.Hubs
+namespace SIN.Hubs
 {
     /// <summary>
     /// SignalR client.

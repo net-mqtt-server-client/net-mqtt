@@ -25,7 +25,7 @@ namespace SIN.Infrastructure.Repositories
         /// <inheritdoc/>
         public async Task<IEnumerable<Measurement>> GetByFiltersAsync(string location, string sensor, string orderBy, string order, string number)
         {
-            var measurements = context.Measurements.AsQueryable();
+            var measurements = this.context.Measurements.AsQueryable();
             if (!string.IsNullOrEmpty(location))
             {
                 measurements = measurements.Where(m => m.Location == location);
@@ -82,13 +82,13 @@ namespace SIN.Infrastructure.Repositories
         /// <inheritdoc/>
         public async Task<Measurement> GetByIdAsync(Guid id)
         {
-            return await context.Measurements.Find(m => m.Id == id).FirstOrDefaultAsync();
+            return await this.context.Measurements.Find(m => m.Id == id).FirstOrDefaultAsync();
         }
 
         /// <inheritdoc/>
         public async Task SaveMeasurementAsync(Measurement measurement)
         {
-            await context.Measurements.InsertOneAsync(measurement);
+            await this.context.Measurements.InsertOneAsync(measurement);
         }
     }
 }
