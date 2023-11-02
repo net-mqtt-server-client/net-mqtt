@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo:latest
+    container_name: mongodb
+    restart: always
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+    ports:
+      - "27017:27017"
+
+  mqtt:
+    image: eclipse-mosquitto:latest
+    container_name: mqtt
+    restart: always
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - mqtt_data:/mqtt/data
+      - mqtt_log:/mqtt/log
+      - ./mqtt_config:/mqtt/config
+    environment:
+      TZ: 'Europe/Warsaw'
+
+volumes:
+  mongo_data:
+  mqtt_data:
+  mqtt_log:
+

@@ -1,9 +1,10 @@
-﻿using SIN.Hubs;
+using SIN.Hubs;
 using SIN.Infrastructure.Context;
 using SIN.Infrastructure.Context.Interfaces;
 using SIN.Infrastructure.Repositories;
 using SIN.Infrastructure.Repositories.Interfaces;
 using SIN.Services.Converters;
+using SIN.Services.Converters.Interfaces;
 using SIN.Services.Services;
 using SIN.Services.Services.Interfaces;
 using SIN.Subscribers;
