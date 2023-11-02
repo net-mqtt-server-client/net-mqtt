@@ -1,6 +1,6 @@
 ﻿using SIN.Domain.Entities;
 
-namespace SIN.Services.Converters
+namespace SIN.Services.Converters.Interfaces
 {
     /// <summary>
     /// Interface for converting data to CSV format.

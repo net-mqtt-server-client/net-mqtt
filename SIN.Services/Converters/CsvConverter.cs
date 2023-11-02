@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.Text;
 using SIN.Domain.Entities;
+using SIN.Services.Converters.Interfaces;
 
 namespace SIN.Services.Converters
 {

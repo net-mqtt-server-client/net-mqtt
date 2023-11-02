@@ -1,8 +1,7 @@
 ﻿using SIN.Domain.Entities;
-using SIN.Domain.Repositories.Interfaces;
-using SIN.Services.Converters;
+using SIN.Infrastructure.Repositories.Interfaces;
+using SIN.Services.Converters.Interfaces;
 using SIN.Services.Services.Interfaces;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SIN.Services.Services
 {

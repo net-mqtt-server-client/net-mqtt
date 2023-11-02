@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using Newtonsoft.Json;
 using SIN.Domain.Entities;
+using SIN.Services.Converters.Interfaces;
 
 namespace SIN.Services.Converters
 {
