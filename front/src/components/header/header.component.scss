@@ -1,0 +1,25 @@
+.header {
+  background-color: #1d1e20;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  border-style: solid;
+  border-width: 0px 0px 1px 0px;
+  /* 25px top, 10px right, 4px bottom and 35px left */
+  border-color: rgb(217, 217, 217);
+  z-index: 2;
+}
+
+.logo-text {
+  font-size: 18px;
+  margin: 10px;
+  font-family: 'Days One',
+    sans-serif;
+  color: rgb(217, 217, 217);
+}
+
