@@ -1,0 +1,22 @@
+{
+  "commons": {
+    "login": "Увійти",
+    "email": "Пошта",
+    "password": "Пароль",
+    "firstName": "Ім'я",
+    "lastName": "Прізвище",
+    "auction": "Аукціон",
+    "archive": "Архів",
+    "description": "Опис",
+    "save": "Зберегти",
+    "register": "Реєстрація"
+  },
+
+  "car": {
+    "auction-end-date": "Закінчення торгів",
+    "registration-year": "Рік випуску",
+    "mile-age": "Пробіг",
+    "engine-displacement": "Обсяг",
+    "fuel-type": "Паливо"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "commons": {
+    "login": "Log in",
+    "email": "Email",
+    "password": "Password",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "auction": "Auction",
+    "archive": "Archive",
+    "home-subtitle": "Maximize Value, Minimize Cost",
+    "description": "Description",
+    "save": "save",
+    "register": "Register"
+  },
+
+  "car": {
+    "auction-end-date": "Auction end date",
+    "registration-year": "Registration year",
+    "mile-age": "Milage",
+    "engine-displacement": "Engine capasity",
+    "fuel-type": "Fuel type"
+  }
+}
