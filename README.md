@@ -1,5 +1,30 @@
 # net-mqtt
 
+## Table of Contents
+
+- [Overview](#overview)
+- [Backend](#backend)
+- [Frontend](#frontend)
+- [Configuration](#configuration)
+- [Usage](#usage)
+- [Copyright and License](#copyright-and-license)
+
+
+- [Backend](#backend)
+  - [Project structure](#project-structure)
+  - [Main used libraries](#main-used-libraries)
+  - [Endpoints](#endpoints)
+  - [Implemented features](#implemented-features)
+  
+- [Configuration](#configuration)
+  - [Databases](#databases)
+  - [Frontend](#frontend)
+    - [Initial setup](#initial-setup)
+- [Copyright and License](#copyright-and-license)
+
+## Overview
+This repository contains the codebase for `net-mqtt`, a robust MQTT messaging solution with a backend service using ASP.NET Core and a frontend application built with Angular. It allows for real-time communication with IoT devices and provides a user interface for monitoring and managing the sensor data.
+
 ## Backend
 Backend part of the application was written using **ASP.NET Core** and **.Net 7.0**.
 
@@ -69,3 +94,64 @@ Solution was implemented using DDD (Domain Driven Design) pattern. Accoriding to
 - [x] Reading data from the database
 - [x] Filtering and sorting data based on given criteria
 - [x] Data export (filtered, sorted) in CSV, JSON format
+
+## Frontend
+
+The frontend of `net-mqtt` is an Angular-based application that provides a real-time user interface for displaying sensor data. It uses the SignalR library to enable real-time web functionality, allowing for live updates of sensor readings without the need for page refreshes.
+
+### Project Structure
+
+The Angular project is structured to include modules for each main feature, components for each view, and services to handle business logic and API calls.
+
+- `/src/app`
+- `/modules` - Feature modules.
+- `/components` - Reusable Angular components.
+- `/services` - Services for HTTP requests and SignalR connections.
+
+### Main Used Libraries
+
+- `@angular/core` - The core Angular framework.
+- `@microsoft/signalr` - The Microsoft SignalR library for Angular, enabling real-time communication.
+- `primeNG` - A collection of rich UI components for Angular.
+- `rxjs` - Reactive extensions for Angular, used for managing state and data flow.
+
+### SignalR Integration
+
+The application uses SignalR for subscribing to backend notifications. The service logic located at `/src/app/components/sensor-data/sensor-data.component.ts` handles the connection and coordination of real-time data updates.
+
+### Real-Time Data Updates
+
+The application uses a subscription model to listen for data updates from the backend. Upon receiving a new message, the frontend updates the relevant components, ensuring the display is always current.
+
+### PrimeNG Components
+
+PrimeNG components are utilized to create a responsive and interactive user interface. Components such as charts, tables, and dropdowns are styled and configured to present sensor data effectively.
+
+### Styling
+
+The application uses a combination of PrimeNG's theming capabilities and custom SCSS for styling.
+
+## Configuration
+
+Configuration of the application is handled through environment variables and configuration files. Adjust `environment.ts` for development settings and `environment.prod.ts` for production settings.
+
+### Databases
+1. Open ```net-mqtt``` folder in terminal
+2. ```docker compose up -d```
+
+## Usage
+
+### Frontend
+#### Initial setup
+1. Navigate to the  ```front``` directory.
+2. Install dependencies with  ```npm install```.
+3. Run the development server with  ```npm start```.
+3. Open page at `http://localhost:3000/`.
+
+#### Building for Production
+
+1. Run `ng build --prod` to create a production build.
+
+## Copyright and License
+Copyright 2023 Yauheni Hulevich, Dzianis Dziurdz, Fiodar Litskevich, Danila Rubleuski  <br>
+Code released under the MIT license.
