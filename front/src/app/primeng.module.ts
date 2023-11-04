@@ -21,42 +21,46 @@ import { TagModule } from 'primeng/tag';
 import { CalendarModule } from 'primeng/calendar';
 import { EditorModule } from 'primeng/editor';
 import { GalleriaModule } from 'primeng/galleria';
+import { SkeletonModule } from 'primeng/skeleton';
 import { DividerModule } from 'primeng/divider';
 import { ChartModule } from 'primeng/chart';
+import { MenuModule } from 'primeng/menu';
 import { TooltipModule } from 'primeng/tooltip';
 import { ListboxModule } from 'primeng/listbox';
 import { PasswordModule } from 'primeng/password';
 
 @NgModule({
-  imports: [],
-  exports: [
-    InputTextModule,
-    DialogModule,
-    AccordionModule,
-    ToolbarModule,
-    ConfirmDialogModule,
-    MultiSelectModule,
-    RatingModule,
-    ChartModule,
-    InputNumberModule,
-    CalendarModule,
-    OverlayPanelModule,
-    EditorModule,
-    InputTextareaModule,
-    DividerModule,
-    RadioButtonModule,
-    SplitButtonModule,
-    DropdownModule,
-    ButtonModule,
-    TableModule,
-    CardModule,
-    DataViewModule,
-    TagModule,
-    GalleriaModule,
-    TooltipModule,
-    ListboxModule,
-    PasswordModule,
-  ],
-  providers: [ConfirmationService],
+    imports: [],
+    exports: [
+        InputTextModule,
+        DialogModule,
+        AccordionModule,
+        ToolbarModule,
+        ConfirmDialogModule,
+        MenuModule,
+        MultiSelectModule,
+        RatingModule,
+        SkeletonModule,
+        ChartModule,
+        InputNumberModule,
+        CalendarModule,
+        OverlayPanelModule,
+        EditorModule,
+        InputTextareaModule,
+        DividerModule,
+        RadioButtonModule,
+        SplitButtonModule,
+        DropdownModule,
+        ButtonModule,
+        TableModule,
+        CardModule,
+        DataViewModule,
+        TagModule,
+        GalleriaModule,
+        TooltipModule,
+        ListboxModule,
+        PasswordModule,
+    ],
+    providers: [ConfirmationService],
 })
 export class PrimeNgModule {}

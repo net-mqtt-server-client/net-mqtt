@@ -18,70 +18,72 @@ import { HeaderComponent } from 'src/components/header/header.component';
 import { FooterComponent } from 'src/components/footer/footer.component';
 import { QuillModule } from 'ngx-quill';
 import { SensorDataComponent } from 'src/components/sensor-data/sensor-data.component';
+import { SensorDataFilterComponent } from 'src/components/sensor-data/sensor-data-filter/sensor-data-filter.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    SensorDataComponent,
-    HeaderComponent,
-    FooterComponent,
-  ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    AppRoutingModule,
-    PrimeNgModule,
-    InputSwitchModule,
-    HttpClientModule,
-    CommonsModule,
-    QuillModule.forRoot({
-      customOptions: [
-        {
-          import: 'formats/font',
-          whitelist: [
-            'mirza',
-            'roboto',
-            'aref',
-            'serif',
-            'sansserif',
-            'monospace',
-          ],
-        },
-      ],
-      modules: {
-        syntax: false,
-        toolbar: [
-          [
-            'bold',
-            'italic',
-            'strike',
-            { header: 1 },
-            { header: 2 },
-            { list: 'ordered' },
-            { list: 'bullet' },
-          ],
-        ],
-      },
-      placeholder: '',
-    }),
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: HttpLoaderFactory,
-        deps: [HttpClient],
-      },
-    }),
-    ReactiveFormsModule,
-    FormsModule,
-    PanelModule,
-    InplaceModule,
-  ],
-  providers: [],
-  bootstrap: [AppComponent],
+    declarations: [
+        AppComponent,
+        SensorDataComponent,
+        SensorDataFilterComponent,
+        HeaderComponent,
+        FooterComponent,
+    ],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        AppRoutingModule,
+        PrimeNgModule,
+        InputSwitchModule,
+        HttpClientModule,
+        CommonsModule,
+        QuillModule.forRoot({
+            customOptions: [
+                {
+                    import: 'formats/font',
+                    whitelist: [
+                        'mirza',
+                        'roboto',
+                        'aref',
+                        'serif',
+                        'sansserif',
+                        'monospace',
+                    ],
+                },
+            ],
+            modules: {
+                syntax: false,
+                toolbar: [
+                    [
+                        'bold',
+                        'italic',
+                        'strike',
+                        { header: 1 },
+                        { header: 2 },
+                        { list: 'ordered' },
+                        { list: 'bullet' },
+                    ],
+                ],
+            },
+            placeholder: '',
+        }),
+        TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClient],
+            },
+        }),
+        ReactiveFormsModule,
+        FormsModule,
+        PanelModule,
+        InplaceModule,
+    ],
+    providers: [],
+    bootstrap: [AppComponent],
 })
 export class AppModule {}
 
 // Required for AOT compilation
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
-  return new TranslateHttpLoader(http);
+    return new TranslateHttpLoader(http);
 }
