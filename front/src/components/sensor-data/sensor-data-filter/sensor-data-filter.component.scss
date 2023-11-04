@@ -1,0 +1,21 @@
+::ng-deep .sensor-data-filter-wrapper {
+    .p-card-content {
+        padding: 0 !important;
+    }
+}
+
+::ng-deep .filter-button-wrapper {
+    p-button:first-child {
+        width: 60%;
+    }
+
+    p-button:last-child {
+        width: 40%;
+    }
+
+    p-button {
+        button {
+            width: 100%;
+        }
+    }
+}

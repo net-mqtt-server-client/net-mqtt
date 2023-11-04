@@ -1,0 +1,131 @@
+<div class="m-3 mb-0 sensor-data-filter-wrapper">
+    <p-card>
+        <div class="row">
+            <div class="col-7">
+                <form [formGroup]="filterForm" class="row">
+                    <!-- Location Type -->
+                    <div class="col-10 mt-2">
+                        <div class="p-input-filled p-float-label">
+                            <p-dropdown
+                                [showClear]="true"
+                                styleClass="full-width"
+                                inputId="location-type-select"
+                                placeholder="{{ 'ㅤ' }}"
+                                [appendTo]="document.body"
+                                [showClear]="true"
+                                formControlName="location"
+                                [options]="locations"
+                            >
+                                <ng-template
+                                    let-selectedOption
+                                    pTemplate="selectedItem"
+                                >
+                                    <div>{{ selectedOption }}</div>
+                                </ng-template>
+                                <ng-template let-optionItem pTemplate="item">
+                                    <div>{{ optionItem }}</div>
+                                </ng-template>
+                            </p-dropdown>
+                            <label htmlFor="location-type-select"
+                                >Location Type</label
+                            >
+                        </div>
+                    </div>
+
+                    <!-- Sensor Type -->
+                    <div class="col-10 mt-4">
+                        <div class="p-input-filled p-float-label">
+                            <p-dropdown
+                                [showClear]="true"
+                                styleClass="full-width"
+                                inputId="sensor-type-select"
+                                placeholder="{{ 'ㅤ' }}"
+                                [appendTo]="document.body"
+                                [showClear]="true"
+                                formControlName="sensor"
+                                [options]="sensors"
+                            >
+                                <ng-template
+                                    let-selectedOption
+                                    pTemplate="selectedItem"
+                                >
+                                    <div>{{ selectedOption }}</div>
+                                </ng-template>
+                                <ng-template let-optionItem pTemplate="item">
+                                    <div>{{ optionItem }}</div>
+                                </ng-template>
+                            </p-dropdown>
+                            <label htmlFor="sensor-type-select"
+                                >Sensor Type</label
+                            >
+                        </div>
+                    </div>
+
+                    <!-- Number -->
+                    <div class="col-10 mt-4">
+                        <div class="p-input-filled p-float-label">
+                            <p-dropdown
+                                [showClear]="true"
+                                styleClass="full-width"
+                                inputId="number-type-select"
+                                placeholder="{{ 'ㅤ' }}"
+                                optionLabel="label"
+                                optionValue="value"
+                                [appendTo]="document.body"
+                                [showClear]="true"
+                                formControlName="number"
+                                [options]="numbers"
+                            >
+                                <ng-template
+                                    let-selectedOption
+                                    pTemplate="selectedItem"
+                                >
+                                    <div>{{ selectedOption.label }}</div>
+                                </ng-template>
+                                <ng-template let-optionItem pTemplate="item">
+                                    <div>{{ optionItem.label }}</div>
+                                </ng-template>
+                            </p-dropdown>
+                            <label htmlFor="number-type-select"
+                                >Number of the rows</label
+                            >
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-5">
+                <div
+                    class="gap-1 filter-button-wrapper mt-2 d-flex justify-content-end"
+                >
+                    <p-button
+                        [loading]="loading"
+                        label="Reset Filters"
+                        (onClick)="resetFilter()"
+                    ></p-button>
+                    <p-button
+                        [loading]="loading"
+                        label="Filter"
+                        (onClick)="sendFilter()"
+                    ></p-button>
+                </div>
+                <div class="mt-2 d-flex justify-content-end">
+                    <p-menu
+                        #menu
+                        [model]="downloadItems"
+                        [popup]="true"
+                    ></p-menu>
+                    <button
+                        style="width: 100%"
+                        pButton
+                        type="button"
+                        [disabled]="loading"
+                        (click)="menu.toggle($event)"
+                        icon="pi pi-download"
+                        label="Download"
+                    ></button>
+                </div>
+            </div>
+        </div>
+    </p-card>
+</div>
