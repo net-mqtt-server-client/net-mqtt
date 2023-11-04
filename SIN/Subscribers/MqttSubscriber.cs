@@ -140,7 +140,7 @@ namespace SIN.Subscribers
             var location = args.ApplicationMessage.Topic.Split('_')[1].Split('/')[0];
             var sensor = args.ApplicationMessage.Topic.Split('_')[1].Split('/')[1];
 
-            var measurement = new Measurement { Id = Guid.NewGuid(), Location = location, Sensor = sensor, Value = value };
+            var measurement = new Measurement { Id = Guid.NewGuid(), Location = location, Sensor = sensor, Value = value, TimeStamp = DateTime.Now };
             await this.measurementRepository.SaveMeasurementAsync(measurement);
             await this.hubClient.Clients.All.SendAsync("RecieveMessage", measurement);
             this.logger.LogInformation($"Received message on topic '{args.ApplicationMessage.Topic}': {Encoding.UTF8.GetString(args.ApplicationMessage.PayloadSegment)}");

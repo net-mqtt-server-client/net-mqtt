@@ -48,6 +48,10 @@ namespace SIN.Infrastructure.Repositories
                     {
                         measurements = measurements.OrderBy(m => m.Sensor);
                     }
+                    else if (orderBy == "timestamp")
+                    {
+                        measurements = measurements.OrderBy(m => m.TimeStamp);
+                    }
                     else if (orderBy == "value")
                     {
                         measurements = measurements.OrderBy(m => m.Value);
@@ -62,6 +66,10 @@ namespace SIN.Infrastructure.Repositories
                     else if (orderBy == "sensor")
                     {
                         measurements = measurements.OrderByDescending(m => m.Sensor);
+                    }
+                    else if (orderBy == "timestamp")
+                    {
+                        measurements = measurements.OrderByDescending(m => m.TimeStamp);
                     }
                     else if (orderBy == "value")
                     {

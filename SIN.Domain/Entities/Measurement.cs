@@ -24,5 +24,10 @@
         /// Gets or sets measurement value.
         /// </summary>
         public float Value { get; set; }
+
+        /// <summary>
+        /// Gets or sets measurement datetime.
+        /// </summary>
+        public DateTime TimeStamp { get; set; }
     }
 }
