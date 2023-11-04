@@ -1,35 +1,350 @@
-<div *ngIf="sensorData">
-  <p-table 
-    [value]="sensorData" [columns]="cols"
-    styleClass="p-datatable-sm bom-table"
-    dataKey="id"
-    [lazy]="true"
-    [lazyLoadOnInit]="false"
-    [showCurrentPageReport]="true"
-    [loading]="loading"
-    [paginator]="true"
-    [rowHover]="true"
-    [paginatorDropdownAppendTo]="document.body"
-    [scrollable]="true"
-    scrollHeight="flex"
-    (onSort)="onSort($event)">
-    <ng-template pTemplate="header" let-columns>
-      <tr>
-        <th *ngFor="let col of columns" [pSortableColumn]="col.field">
-          {{ col.header }}
-          <p-sortIcon [field]="col.field"></p-sortIcon>
-        </th>
-      </tr>
-      <!-- Add filter elements here -->
-    </ng-template>
-    <ng-template pTemplate="body" let-rowData let-columns="columns">
-      <tr>
-        <td *ngFor="let col of columns">
-          {{ rowData[col.field] }}
-        </td>
-      </tr>
-    </ng-template>
-  </p-table>
+<div class="row m-0">
+    <!-- LEFT CONTAINER -->
+    <div class="col-5">
+        <!-- FILTER -->
+        <app-sensor-data-filter
+            [filterForm]="filterForm"
+            [loading]="loading"
+        ></app-sensor-data-filter>
+
+        <!-- TABLE -->
+        <div *ngIf="!loading && sensorData && sensorData.length">
+            <div class="m-3">
+                <p-table
+                    [value]="sensorData"
+                    [columns]="cols"
+                    styleClass="p-datatable-sm bom-table"
+                    dataKey="id"
+                    [loading]="loading"
+                    [rowHover]="true"
+                    [scrollable]="true"
+                    scrollHeight="flex"
+                    scrollHeight="355px"
+                    (onSort)="onSort($event)"
+                >
+                    <ng-template pTemplate="header" let-columns>
+                        <tr>
+                            <th pSortableColumn="sensor">
+                                <div
+                                    class="header-with-sort-icon flex align-items-center"
+                                >
+                                    Sensor Type
+                                    <p-sortIcon field="sensor"></p-sortIcon>
+                                </div>
+                            </th>
+                            <th pSortableColumn="location">
+                                <div
+                                    class="header-with-sort-icon flex align-items-center"
+                                >
+                                    Location
+                                    <p-sortIcon field="location"></p-sortIcon>
+                                </div>
+                            </th>
+                            <th class="text-center sn" pSortableColumn="value">
+                                <div
+                                    class="header-with-sort-icon flex justify-content-center align-items-center"
+                                >
+                                    Value
+                                    <p-sortIcon field="value"></p-sortIcon>
+                                </div>
+                            </th>
+                            <th class="text-end sn" pSortableColumn="timeStamp">
+                                <div
+                                    class="header-with-sort-icon flex justify-content-end align-items-center"
+                                >
+                                    Time Stamp
+                                    <p-sortIcon field="timeStamp"></p-sortIcon>
+                                </div>
+                            </th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-rowData>
+                        <tr>
+                            <td>
+                                {{ rowData.sensor }}
+                            </td>
+                            <td>
+                                {{ rowData.location }}
+                            </td>
+                            <td class="text-center sn">
+                                {{ rowData.value }}
+                            </td>
+                            <td class="text-right sn">
+                                {{ rowData.timeStamp }}
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+
+        <!-- NO DATA -->
+        <div *ngIf="!loading && sensorData && !sensorData.length">
+            <div class="m-3">
+                <p-card
+                    class="flex info-container no-data-class w-100 justify-content-center align-items-center text-center"
+                >
+                    <span
+                        class="flex align-items-center gap-2 justify-content-center"
+                    >
+                        <i class="bi bi-x-circle info-icon info-icon-red"></i>
+                        <span class="info-text"> No Data </span>
+                    </span>
+                </p-card>
+            </div>
+        </div>
+
+        <!-- LOADING -->
+        <div *ngIf="loading">
+            <div class="m-3">
+                <p-table
+                    [value]="itemsSkeletonElements"
+                    styleClass="p-datatable-sm bom-table"
+                >
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Sensor Type</th>
+                            <th>Location</th>
+                            <th class="text-center">Value</th>
+                            <th class="text-right">Time Stamp</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-rowData>
+                        <tr>
+                            <td><p-skeleton></p-skeleton></td>
+                            <td><p-skeleton></p-skeleton></td>
+                            <td><p-skeleton></p-skeleton></td>
+                            <td><p-skeleton></p-skeleton></td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+    </div>
+
+    <!-- RIGHT CONTAINER -->
+    <div class="col-7">
+        <div class="row">
+            <div
+                *ngIf="
+                    chartDataTemperature && chartDataTemperature.labels.length
+                "
+                class="col-6 m-0 p-0"
+            >
+                <p-card styleClass="chart-card-wrapper">
+                    <ng-template pTemplate="header">
+                        <div
+                            class="flex align-items-center justify-content-between"
+                        >
+                            <div class="ml-3 mt-2">
+                                Temperature Chart (&deg;C)
+                            </div>
+                        </div>
+                    </ng-template>
+                    <p-chart
+                        type="line"
+                        [data]="chartDataTemperature"
+                        [options]="options"
+                    ></p-chart>
+                </p-card>
+            </div>
+
+            <div
+                *ngIf="chartDataHumidity && chartDataHumidity.labels.length"
+                class="col-6 m-0 p-0"
+            >
+                <p-card styleClass="chart-card-wrapper">
+                    <ng-template pTemplate="header">
+                        <div
+                            class="flex align-items-center justify-content-between"
+                        >
+                            <div class="ml-3 mt-2">Humidity Chart (% RH)</div>
+                        </div>
+                    </ng-template>
+                    <p-chart
+                        type="line"
+                        [data]="chartDataHumidity"
+                        [options]="options"
+                    ></p-chart>
+                </p-card>
+            </div>
+
+            <div
+                *ngIf="chartDataLight && chartDataLight.labels.length"
+                class="col-6 m-0 p-0"
+            >
+                <p-card styleClass="chart-card-wrapper">
+                    <ng-template pTemplate="header">
+                        <div
+                            class="flex align-items-center justify-content-between"
+                        >
+                            <div class="ml-3 mt-2">Light Chart (Lux)</div>
+                        </div>
+                    </ng-template>
+                    <p-chart
+                        type="line"
+                        [data]="chartDataLight"
+                        [options]="options"
+                    ></p-chart>
+                </p-card>
+            </div>
+
+            <div
+                *ngIf="chartDataSound && chartDataSound.labels.length"
+                class="col-6 m-0 p-0"
+            >
+                <p-card styleClass="chart-card-wrapper">
+                    <ng-template pTemplate="header">
+                        <div
+                            class="flex align-items-center justify-content-between"
+                        >
+                            <div class="ml-3 mt-2">Sound Chart (dB)</div>
+                        </div>
+                    </ng-template>
+
+                    <p-chart
+                        type="line"
+                        [data]="chartDataSound"
+                        [options]="options"
+                    ></p-chart>
+                </p-card>
+            </div>
+        </div>
+    </div>
 </div>
 
-<p-chart type="line" [data]="chartData"></p-chart>
+<div class="row m-0">
+    <div class="col-3">
+        <p-card header="Temperature" styleClass="info-panel-card-wrapper">
+            <div>
+                Average:
+                {{
+                    infoPanelSensorData.temperature &&
+                    infoPanelSensorData.temperature.average
+                        ? (infoPanelSensorData.temperature.average
+                          | number : "1.2-2")
+                        : "Waiting for first data"
+                }}
+            </div>
+            <div>
+                Last Value:
+                {{
+                    infoPanelSensorData.temperature &&
+                    infoPanelSensorData.temperature.lastValue
+                        ? (infoPanelSensorData.temperature.lastValue
+                          | number : "1.2-2")
+                        : "Waiting for first data"
+                }}
+            </div>
+            <div>
+                Length:
+                {{
+                    infoPanelSensorData.temperature &&
+                    infoPanelSensorData.temperature.values.length
+                        ? infoPanelSensorData.temperature.values.length
+                        : "Waiting for first data"
+                }}
+            </div>
+        </p-card>
+    </div>
+
+    <div class="col-3">
+        <p-card header="Humidity" styleClass="info-panel-card-wrapper">
+            <div>
+                Average:
+                {{
+                    infoPanelSensorData.humidity &&
+                    infoPanelSensorData.humidity.average
+                        ? (infoPanelSensorData.humidity.average
+                          | number : "1.2-2")
+                        : "Waiting for first data"
+                }}
+            </div>
+            <div>
+                Last Value:
+                {{
+                    infoPanelSensorData.humidity &&
+                    infoPanelSensorData.humidity.lastValue
+                        ? (infoPanelSensorData.humidity.lastValue
+                          | number : "1.2-2")
+                        : "Waiting for first data"
+                }}
+            </div>
+            <div>
+                Length:
+                {{
+                    infoPanelSensorData.humidity &&
+                    infoPanelSensorData.humidity.values.length
+                        ? infoPanelSensorData.humidity.values.length
+                        : "Waiting for first data"
+                }}
+            </div>
+        </p-card>
+    </div>
+
+    <div class="col-3">
+        <p-card header="Sound" styleClass="info-panel-card-wrapper">
+            <div>
+                Average:
+                {{
+                    infoPanelSensorData.sound &&
+                    infoPanelSensorData.sound.average
+                        ? (infoPanelSensorData.sound.average | number : "1.2-2")
+                        : "Waiting for first data"
+                }}
+            </div>
+            <div>
+                Last Value:
+                {{
+                    infoPanelSensorData.sound &&
+                    infoPanelSensorData.sound.lastValue
+                        ? (infoPanelSensorData.sound.lastValue
+                          | number : "1.2-2")
+                        : "Waiting for first data"
+                }}
+            </div>
+            <div>
+                Length:
+                {{
+                    infoPanelSensorData.sound &&
+                    infoPanelSensorData.sound.values.length
+                        ? infoPanelSensorData.sound.values.length
+                        : "Waiting for first data"
+                }}
+            </div>
+        </p-card>
+    </div>
+
+    <div class="col-3">
+        <p-card header="Light" styleClass="info-panel-card-wrapper">
+            <div>
+                Average:
+                {{
+                    infoPanelSensorData.light &&
+                    infoPanelSensorData.light.average
+                        ? (infoPanelSensorData.light.average | number : "1.2-2")
+                        : "Waiting for first data"
+                }}
+            </div>
+            <div>
+                Last Value:
+                {{
+                    infoPanelSensorData.light &&
+                    infoPanelSensorData.light.lastValue
+                        ? (infoPanelSensorData.light.lastValue
+                          | number : "1.2-2")
+                        : "Waiting for first data"
+                }}
+            </div>
+            <div>
+                Length:
+                {{
+                    infoPanelSensorData.light &&
+                    infoPanelSensorData.light.values.length
+                        ? infoPanelSensorData.light.values.length
+                        : "Waiting for first data"
+                }}
+            </div>
+        </p-card>
+    </div>
+</div>

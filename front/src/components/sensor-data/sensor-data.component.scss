@@ -1,0 +1,41 @@
+::ng-deep .no-data-class {
+    & > .p-card {
+        width: 100% !important;
+        .p-card-body {
+            width: 100% !important;
+        }
+    }
+}
+
+::ng-deep .p-datatable-wrapper {
+    border-radius: 5px;
+    box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2),
+        0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
+}
+
+::ng-deep .chart-card-wrapper {
+    margin: 1rem 0.5rem 0 0.5rem !important;
+
+    .p-card-title {
+        margin-left: 0.4rem !important;
+    }
+
+    .p-card-body {
+        padding: 0 !important;
+        .p-card-content {
+            padding: 5px !important;
+        }
+    }
+}
+
+::ng-deep .info-panel-card-wrapper {
+    margin: 0.5rem;
+
+    &:first-child {
+        margin: 0.5rem 0.5rem 0.5rem 1rem !important;
+    }
+
+    .p-card-body {
+        padding: 0.5rem !important;
+    }
+}
