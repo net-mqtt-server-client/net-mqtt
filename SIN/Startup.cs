@@ -55,8 +55,14 @@ namespace SIN
         /// <param name="env">Application environment.</param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            var frontendOrigin = this.Configuration.GetValue<string>("CORS");
+
             app.UseHttpsRedirection();
-            app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins(this.Configuration.GetSection("CORS").Get<string>() ?? throw new InvalidDataException("frontend link not found")));
+            app.UseCors(policyBuilder => policyBuilder
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .WithOrigins(frontendOrigin)
+                .AllowCredentials());
 
             app.UseRouting();
 

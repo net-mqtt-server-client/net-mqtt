@@ -44,7 +44,8 @@ namespace SIN
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder.UseStartup<Startup>()
+                        .UseUrls("http://localhost:28234");
                 });
     }
 }
