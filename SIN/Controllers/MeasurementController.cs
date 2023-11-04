@@ -36,7 +36,7 @@ namespace SIN.Controllers
         public async Task<IActionResult> GetAll(
             [FromQuery(Name = "location")] string location = "",
             [FromQuery(Name = "sensor")] string sensor = "",
-            [FromQuery(Name = "order-by")] string orderBy = "",
+            [FromQuery(Name = "orderBy")] string orderBy = "",
             [FromQuery(Name = "order")] string order = "",
             [FromQuery(Name = "number")] string number = "")
         {
@@ -57,7 +57,7 @@ namespace SIN.Controllers
         public async Task GetAllJson(
             [FromQuery(Name = "location")] string location = "",
             [FromQuery(Name = "sensor")] string sensor = "",
-            [FromQuery(Name = "order-by")] string orderBy = "",
+            [FromQuery(Name = "orderBy")] string orderBy = "",
             [FromQuery(Name = "order")] string order = "",
             [FromQuery(Name = "number")] string number = "")
         {
@@ -81,7 +81,7 @@ namespace SIN.Controllers
         public async Task GetAllCsv(
             [FromQuery(Name = "location")] string location = "",
             [FromQuery(Name = "sensor")] string sensor = "",
-            [FromQuery(Name = "order-by")] string orderBy = "",
+            [FromQuery(Name = "orderBy")] string orderBy = "",
             [FromQuery(Name = "order")] string order = "",
             [FromQuery(Name = "number")] string number = "")
         {
