@@ -1,18 +1,30 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { DataSourceService } from './dataSource.service';
 
 @Injectable({
-  providedIn: 'root',
+    providedIn: 'root',
 })
 export class SensorDataService {
-  private apiUrl = 'your-api-url'; // Replace with your actual API URL
+    constructor(private dataSource: DataSourceService) {}
 
-  constructor(private http: HttpClient) {}
+    getSensors() {
+        return ['temperature', 'humidity', 'light', 'sound'];
+    }
 
-  getSensorData(filters: any): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/sensors`, { params: filters });
-  }
+    getRooms() {
+        return ['livingroom', 'bedroom', 'hall', 'toilet'];
+    }
 
-  // Method to download data in CSV/JSON format, implement as needed based on your API
+    getSensorData(filters: any): Observable<any> {
+        return this.dataSource.get('/api/measurements', filters);
+    }
+
+    downloadJson(filters: any): Observable<any> {
+        return this.dataSource.downloadJson('/api/measurements/json', filters);
+    }
+
+    downloadCsv(filters: any): Observable<any> {
+        return this.dataSource.downloadCsv('/api/measurements/csv', filters);
+    }
 }
