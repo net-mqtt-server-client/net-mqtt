@@ -4,33 +4,34 @@ import { Subject } from 'rxjs/internal/Subject';
 import { filter, map } from 'rxjs/operators';
 
 export enum Events {
-  FILTER,
-  LOGOUT,
+    FILTER,
+    RESET_FILTER,
+    LOGOUT,
 }
 
 interface BroadcastEvent {
-  key: any;
-  data?: any;
+    key: any;
+    data?: any;
 }
 
 @Injectable({
-  providedIn: 'root',
+    providedIn: 'root',
 })
 export class EventService {
-  private _eventBus: Subject<BroadcastEvent>;
+    private _eventBus: Subject<BroadcastEvent>;
 
-  constructor() {
-    this._eventBus = new Subject<BroadcastEvent>();
-  }
+    constructor() {
+        this._eventBus = new Subject<BroadcastEvent>();
+    }
 
-  broadcast(key: any, data?: any) {
-    this._eventBus.next({ key, data });
-  }
+    broadcast(key: any, data?: any) {
+        this._eventBus.next({ key, data });
+    }
 
-  on<T>(key: any): Observable<T> {
-    return this._eventBus.asObservable().pipe(
-      filter((event: any) => event.key === key),
-      map((event: any) => <T>event.data)
-    );
-  }
+    on<T>(key: any): Observable<T> {
+        return this._eventBus.asObservable().pipe(
+            filter((event: any) => event.key === key),
+            map((event: any) => <T>event.data)
+        );
+    }
 }
