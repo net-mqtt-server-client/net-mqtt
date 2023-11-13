@@ -1,33 +1,60 @@
-version: "3.8"
+version: "3.8" 
+ 
+services: 
+    mongo: 
+        image: mongo:latest 
+        container_name: mongodb 
+        restart: always 
+        volumes: 
+            - mongo_data:/data/db 
+        environment: 
+            MONGO_INITDB_ROOT_USERNAME: root 
+            MONGO_INITDB_ROOT_PASSWORD: password 
+        ports: 
+            - "27017:27017" 
+ 
+    mosquitto: 
+        image: eclipse-mosquitto:latest 
+        container_name: mosquitto 
+        restart: always 
+        ports: 
+            - "1883:1883" 
+            - "9001:9001" 
+        volumes: 
+            - mosquitto_data:/mosquitto/data 
+            - mosquitto_log:/mosquitto/log 
+            - ./mosquitto_config:/mosquitto/config 
+        environment: 
+            TZ: "Europe/Warsaw" 
+ 
+    frontend: 
+        build: ./front 
+        ports: 
+            - "3000:3000" 
+        networks: 
+            - net 
+ 
+    webapi: 
+        build:  
+            dockerfile: ./backend/Dockerfile 
+            context: . 
+        environment: 
+            - ConnectionStrings__MongoDB=mongodb://root:password@localhost:27017 
+            - CORS=http://localhost:3000 
+            - MongoDB=http://localhost:27017 
+            - MQTT__Port=1883 
+        ports: 
+            - '5000:80'  
+        networks: 
+            - net 
+        depends_on: 
+            - mongo 
+            
+networks:
+    net:
+        driver: bridge
 
-services:
-    mongo:
-        image: mongo:latest
-        container_name: mongodb
-        restart: always
-        volumes:
-            - mongo_data:/data/db
-        environment:
-            MONGO_INITDB_ROOT_USERNAME: root
-            MONGO_INITDB_ROOT_PASSWORD: password
-        ports:
-            - "27017:27017"
-
-    mosquitto:
-        image: eclipse-mosquitto:latest
-        container_name: mosquitto
-        restart: always
-        ports:
-            - "1883:1883"
-            - "9001:9001"
-        volumes:
-            - mosquitto_data:/mosquitto/data
-            - mosquitto_log:/mosquitto/log
-            - ./mosquitto_config:/mosquitto/config
-        environment:
-            TZ: "Europe/Warsaw"
-
-volumes:
-    mongo_data:
-    mosquitto_data:
+volumes: 
+    mongo_data: 
+    mosquitto_data: 
     mosquitto_log:
