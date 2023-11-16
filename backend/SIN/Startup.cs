@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http.Connections;
+using Microsoft.AspNetCore.SignalR;
 using SIN.Hubs;
 using SIN.Infrastructure.Context;
 using SIN.Infrastructure.Context.Interfaces;
@@ -45,7 +47,11 @@ namespace SIN
             services.AddControllers();
             services.AddCors();
             services.AddLogging();
-            services.AddSignalR();
+            services.AddSignalR(hubOptions => {
+                hubOptions.EnableDetailedErrors = true;
+                hubOptions.KeepAliveInterval = TimeSpan.FromSeconds(10);
+                hubOptions.HandshakeTimeout = TimeSpan.FromSeconds(5);
+            });
         }
 
         /// <summary>
@@ -68,7 +74,9 @@ namespace SIN
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapHub<HubClient>(this.Configuration.GetSection("Hub:Endpoint").Get<string>());
+                endpoints.MapHub<HubClient>(this.Configuration.GetSection("Hub:Endpoint").Get<string>(), options => {
+                    options.Transports = HttpTransportType.WebSockets;
+                });
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");

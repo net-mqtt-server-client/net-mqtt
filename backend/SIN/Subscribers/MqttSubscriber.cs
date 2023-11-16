@@ -132,7 +132,12 @@ namespace SIN.Subscribers
         /// <returns>Async void.</returns>
         private async Task MessageReceivedHandler(MqttApplicationMessageReceivedEventArgs args)
         {
-            if (!float.TryParse(Encoding.UTF8.GetString(args.ApplicationMessage.PayloadSegment), CultureInfo.InvariantCulture, out float value))
+            if (!DateTime.TryParseExact(Encoding.UTF8.GetString(args.ApplicationMessage.PayloadSegment).Split(';')[0], "yyyy-MM-dd HH:mm:ss.ffffff", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime dateTime))
+            {
+                throw new InvalidDataException("date and time format is not correct");
+            }
+
+            if (!float.TryParse(Encoding.UTF8.GetString(args.ApplicationMessage.PayloadSegment).Split(';')[1], CultureInfo.InvariantCulture, out float value))
             {
                 throw new InvalidDataException("value is not float");
             }
@@ -140,7 +145,7 @@ namespace SIN.Subscribers
             var location = args.ApplicationMessage.Topic.Split('_')[1].Split('/')[0];
             var sensor = args.ApplicationMessage.Topic.Split('_')[1].Split('/')[1];
 
-            var measurement = new Measurement { Id = Guid.NewGuid(), Location = location, Sensor = sensor, Value = value, TimeStamp = DateTime.Now };
+            var measurement = new Measurement { Id = Guid.NewGuid(), Location = location, Sensor = sensor, Value = value, TimeStamp = dateTime };
             await this.measurementRepository.SaveMeasurementAsync(measurement);
             await this.hubClient.Clients.All.SendAsync("RecieveMessage", measurement);
             this.logger.LogInformation($"Received message on topic '{args.ApplicationMessage.Topic}': {Encoding.UTF8.GetString(args.ApplicationMessage.PayloadSegment)}");
