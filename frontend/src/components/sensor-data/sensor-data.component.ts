@@ -76,7 +76,7 @@ export class SensorDataComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.loading = true;
         this.connection = new signalR.HubConnectionBuilder()
-            .withUrl('http://localhost:28234/notify')
+            .withUrl('http://webapi:28234/notify')
             .build();
 
         this.connection

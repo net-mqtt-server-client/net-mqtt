@@ -12,6 +12,8 @@ services:
             MONGO_INITDB_ROOT_PASSWORD: password 
         ports: 
             - "27017:27017" 
+        networks:
+            - net
  
     mosquitto: 
         image: eclipse-mosquitto:latest 
@@ -26,29 +28,35 @@ services:
             - ./mosquitto_config:/mosquitto/config 
         environment: 
             TZ: "Europe/Warsaw" 
- 
-    frontend: 
-        build: ./front 
-        ports: 
-            - "3000:3000" 
-        networks: 
-            - net 
+        networks:
+            - net
  
     webapi: 
-        build:  
-            dockerfile: ./backend/Dockerfile 
-            context: . 
+        build: backend
+        container_name: webapi
         environment: 
-            - ConnectionStrings__MongoDB=mongodb://root:password@localhost:27017 
-            - CORS=http://localhost:3000 
-            - MongoDB=http://localhost:27017 
-            - MQTT__Port=1883 
+            - ConnectionStrings__MongoDB=mongodb://root:password@mongodb:27017 
+            - CORS=http://frontend:3000
+            - MQTT__Port=1883
+            - MQTT__Host=mosquitto
         ports: 
-            - '5000:80'  
+            - '28234:28234'  
         networks: 
             - net 
         depends_on: 
             - mongo 
+            - mosquitto
+
+    frontend: 
+        build: frontend
+        container_name: frontend
+        ports: 
+            - "3000:3000" 
+        depends_on:
+            - webapi
+        networks: 
+            - net 
+            # - front
             
 networks:
     net:
