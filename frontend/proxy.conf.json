@@ -1,6 +1,6 @@
 {
   "/rest": {
-    "target": "http://localhost:28234",
+    "target": "http://webapi:28234",
     "secure": false
   }
 }
