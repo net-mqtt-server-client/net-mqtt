@@ -47,6 +47,6 @@ def sender(client_name):
 
 # Main code
 if __name__ == "__main__":
-    for i in range(0, configuration.NUMBER_OF_CLIENTS):
-        client_thread = threading.Thread(target=sender, args=(f"client",))
-        client_thread.start()
+    # for i in range(0, configuration.NUMBER_OF_CLIENTS):
+    client_thread = threading.Thread(target=sender, args=(f"client",))
+    client_thread.start()

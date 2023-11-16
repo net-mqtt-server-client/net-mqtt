@@ -87,7 +87,7 @@ Solution was implemented using DDD (Domain Driven Design) pattern. Accoriding to
   Consumes measurements on 16 topics (combinations of 4 locations and 4 sensors) on ```localhost:1883``` as client1. Topics, host, port and client name can be modified  in ```appsettings.json```.
 - SignalR
   
-  Application sends notifications to all connected applications. To connect to solution send web socker request ```wss://localhost:28234/notify```.  Url can be set in ```appsettings.json```.
+  Application sends notifications to all connected applications. To connect to solution send web socker request ```wss://localhost:28234/api/notify```.  Url can be set in ```appsettings.json```.
 
 ### Implemented features
 - [x] Automatic data download from queues, data conversion and saving in the database
