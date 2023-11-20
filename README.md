@@ -3,6 +3,7 @@
 ## Table of Contents
 
 - [Overview](#overview)
+  - [Running Project](#running-project)
 - [Backend](#backend)
 - [Frontend](#frontend)
 - [Configuration](#configuration)
@@ -17,13 +18,17 @@
   - [Implemented features](#implemented-features)
   
 - [Configuration](#configuration)
-  - [Databases](#databases)
   - [Frontend](#frontend)
     - [Initial setup](#initial-setup)
 - [Copyright and License](#copyright-and-license)
 
 ## Overview
 This repository contains the codebase for `net-mqtt`, a robust MQTT messaging solution with a backend service using ASP.NET Core and a frontend application built with Angular. It allows for real-time communication with IoT devices and provides a user interface for monitoring and managing the sensor data.
+
+### Running Project
+1. Open ```net-mqtt``` folder in terminal
+2. run in cmd ```docker compose up -d```
+
 
 ## Backend
 Backend part of the application was written using **ASP.NET Core** and **.Net 7.0**.
@@ -135,22 +140,14 @@ The application uses a combination of PrimeNG's theming capabilities and custom 
 
 Configuration of the application is handled through environment variables and configuration files. Adjust `environment.ts` for development settings and `environment.prod.ts` for production settings.
 
-### Databases
-1. Open ```net-mqtt``` folder in terminal
-2. ```docker compose up -d```
-
 ## Usage
 
 ### Frontend
-#### Initial setup
-1. Navigate to the  ```front``` directory.
+#### Initial setup for development
+1. Navigate to the  ```frontend``` directory.
 2. Install dependencies with  ```npm install```.
 3. Run the development server with  ```npm start```.
 3. Open page at `http://localhost:3000/`.
-
-#### Building for Production
-
-1. Run `ng build --prod` to create a production build.
 
 ## Copyright and License
 Copyright 2023 Yauheni Hulevich, Dzianis Dziurdz, Fiodar Litskevich, Danila Rubleuski  <br>
